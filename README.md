@@ -8,7 +8,7 @@ Você pode simplesmente baixar o arquivo `Controller.php` e incluí-lo no seu pr
 
 ## Uso
 
-###1 - Configuração
+### 1 - Configuração
 
 ```php
 <?php
@@ -19,4 +19,4 @@ require_once 'Controller.php';
 $db = new Controller();
 ?>
 ```
-###2 - Inserção de Dados
+### 2 - Inserção de Dados
