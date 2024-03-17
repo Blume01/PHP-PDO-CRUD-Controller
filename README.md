@@ -22,6 +22,7 @@ $db = new Controller();
 ### 2 - Inserção de Dados
 
 ```php
+<?php
 $insert_array = [
     "name" => "Aisaka",
     "email" => "exemplo@exemplo.com",
@@ -40,6 +41,7 @@ if ($insert_data) {
 ### 3 - Seleção de Dados (Sem o ORDER BY)
 
 ```php
+<?php
 $select_array = [
     "age" => 23
 ];
@@ -56,6 +58,7 @@ if ($select_data) {
 ### 4 - Seleção de Dados (Com o ORDER BY)
 
 ```php
+<?php
 $select_array = [
     "age" => 23
 ];
@@ -72,6 +75,7 @@ if ($select_data) {
 ### 5 - Atualização de Dados
 
 ```php
+<?php
 $update_array = [
     "age" => 23
 ];
@@ -92,6 +96,7 @@ if ($update_data) {
 ### 6 - Exclusão de Dados
 
 ```php
+<?php
 $delete_where = array(
     "age" => 23
 );
