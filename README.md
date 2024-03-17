@@ -36,6 +36,7 @@ if ($insert_data) {
 } else {
     echo "Erro ao inserir dados.";
 }
+?>
 ```
 
 ### 3 - Seleção de Dados (Sem o ORDER BY)
