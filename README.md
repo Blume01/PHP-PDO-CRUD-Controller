@@ -11,18 +11,15 @@ Você pode simplesmente baixar o arquivo `Controller.php` e incluí-lo no seu pr
 ### 1 - Configuração
 
 ```php
-<?php
 // Inclua a classe Controller
 require('controller.php');
 
 // Instancie o objeto Controller para acessar as funções CRUD
 $db = new Controller();
-?>
 ```
 ### 2 - Inserção de Dados
 
 ```php
-<?php
 $insert_array = [
     "name" => "Aisaka",
     "email" => "exemplo@exemplo.com",
@@ -36,13 +33,11 @@ if ($insert_data) {
 } else {
     echo "Erro ao inserir dados.";
 }
-?>
 ```
 
 ### 3 - Seleção de Dados (Sem o ORDER BY)
 
 ```php
-<?php
 $select_array = [
     "age" => 23
 ];
@@ -59,7 +54,6 @@ if ($select_data) {
 ### 4 - Seleção de Dados (Com o ORDER BY)
 
 ```php
-<?php
 $select_array = [
     "age" => 23
 ];
@@ -76,7 +70,6 @@ if ($select_data) {
 ### 5 - Atualização de Dados
 
 ```php
-<?php
 $update_array = [
     "age" => 23
 ];
@@ -97,7 +90,6 @@ if ($update_data) {
 ### 6 - Exclusão de Dados
 
 ```php
-<?php
 $delete_where = array(
     "age" => 23
 );
