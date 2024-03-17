@@ -25,7 +25,7 @@ $db = new Controller();
 $insert_array = [
     "name" => "Aisaka",
     "email" => "exemplo@exemplo.com",
-    "age" => 30
+    "age" => 23
 ];
 
 $insert_data = $db->insert("users", $insert_array);
@@ -41,7 +41,7 @@ if ($insert_data) {
 
 ```php
 $select_array = [
-    "age" => 30
+    "age" => 23
 ];
 
 $select_data = $db->select("users", "*", $select_array);
@@ -57,7 +57,7 @@ if ($select_data) {
 
 ```php
 $select_array = [
-    "age" => 30
+    "age" => 23
 ];
 
 $select_data = $db->select("users", "*", $select_array, "age DESC");
@@ -73,7 +73,7 @@ if ($select_data) {
 
 ```php
 $update_array = [
-    "age" => 31
+    "age" => 23
 ];
 
 $update_where = [
@@ -93,7 +93,7 @@ if ($update_data) {
 
 ```php
 $delete_where = array(
-    "age" => 31
+    "age" => 23
 );
 
 $delete_data = $db->delete("users", $delete_where);
