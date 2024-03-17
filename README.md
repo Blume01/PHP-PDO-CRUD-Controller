@@ -27,10 +27,80 @@ $insert_array = [
     "email" => "exemplo@exemplo.com",
     "age" => 30
 ];
+
 $insert_data = $db->insert("users", $insert_array);
+
 if ($insert_data) {
     echo "Dados inseridos com sucesso!";
 } else {
     echo "Erro ao inserir dados.";
+}
+```
+
+### 3 - Seleção de Dados (Sem o ORDER BY)
+
+```php
+$select_array = [
+    "age" => 30
+];
+
+$select_data = $db->select("users", "*", $select_array);
+
+if ($select_data) {
+    print_r($select_data);
+} else {
+    echo "Nenhum dado encontrado.";
+}
+```
+
+### 4 - Seleção de Dados (Com o ORDER BY)
+
+```php
+$select_array = [
+    "age" => 30
+];
+
+$select_data = $db->select("users", "*", $select_array, "age DESC");
+
+if ($select_data) {
+    print_r($select_data);
+} else {
+    echo "Nenhum dado encontrado.";
+}
+```
+
+### 5 - Atualização de Dados
+
+```php
+$update_array = [
+    "age" => 31
+];
+
+$update_where = [
+    "email" => "exemplo@exemplo.com"
+];
+
+$update_data = $db->update("users", $update_array, $update_where);
+
+if ($update_data) {
+    echo "Dados atualizados com sucesso!";
+} else {
+    echo "Erro ao atualizar dados.";
+}
+```
+
+### 6 - Exclusão de Dados
+
+```php
+$delete_where = array(
+    "age" => 31
+);
+
+$delete_data = $db->delete("users", $delete_where);
+
+if ($delete_data) {
+    echo "Dados excluídos com sucesso!";
+} else {
+    echo "Erro ao excluir dados.";
 }
 ```
