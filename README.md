@@ -13,7 +13,7 @@ Você pode simplesmente baixar o arquivo `Controller.php` e incluí-lo no seu pr
 ```php
 <?php
 // Inclua a classe Controller
-require_once 'Controller.php';
+require('controller.php');
 
 // Instancie o objeto Controller para acessar as funções CRUD
 $db = new Controller();
