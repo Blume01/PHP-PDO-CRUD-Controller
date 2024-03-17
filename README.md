@@ -20,3 +20,17 @@ $db = new Controller();
 ?>
 ```
 ### 2 - Inserção de Dados
+
+```php
+$insert_array = [
+    "name" => "Aisaka",
+    "email" => "exemplo@exemplo.com",
+    "age" => 30
+];
+$insert_data = $db->insert("users", $insert_array);
+if ($insert_data) {
+    echo "Dados inseridos com sucesso!";
+} else {
+    echo "Erro ao inserir dados.";
+}
+```
