@@ -6,7 +6,7 @@ Este é um simples controlador PHP que facilita as operações CRUD (Create, Rea
 
 Você pode simplesmente baixar o arquivo `Controller.php` e incluí-lo no seu projeto PHP.
 
-## Uso
+## Exemplo de Uso
 
 ### 1 - Configuração
 
