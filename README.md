@@ -30,8 +30,6 @@ $insert_data = $db->insert("users", $insert_array);
 
 if ($insert_data) {
     echo "Dados inseridos com sucesso!";
-} else {
-    echo "Erro ao inserir dados.";
 }
 ```
 
@@ -46,8 +44,6 @@ $select_data = $db->select("users", "*", $select_array);
 
 if ($select_data) {
     print_r($select_data);
-} else {
-    echo "Nenhum dado encontrado.";
 }
 ```
 
@@ -62,8 +58,6 @@ $select_data = $db->select("users", "*", $select_array, "age DESC");
 
 if ($select_data) {
     print_r($select_data);
-} else {
-    echo "Nenhum dado encontrado.";
 }
 ```
 
@@ -82,8 +76,6 @@ $update_data = $db->update("users", $update_array, $update_where);
 
 if ($update_data) {
     echo "Dados atualizados com sucesso!";
-} else {
-    echo "Erro ao atualizar dados.";
 }
 ```
 
@@ -98,7 +90,5 @@ $delete_data = $db->delete("users", $delete_where);
 
 if ($delete_data) {
     echo "Dados excluídos com sucesso!";
-} else {
-    echo "Erro ao excluir dados.";
 }
 ```
