@@ -2,78 +2,95 @@
 
 class Controller
 {
-    private $host     = "host";
-    private $username = "dbuser";
-    private $password = "dbpass";
-    private $database = "dbname";
+    private string $host     = "host";
+    private string $username = "dbuser";
+    private string $password = "dbpass";
+    private string $database = "dbname";
 
-    protected $connection;
+    protected PDO $connection;
 
     public function __construct()
     {
         try {
-            $this->connection = new PDO("mysql:host=$this->host;dbname=$this->database", $this->username, $this->password);
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->connection = new PDO(
+                dsn: "mysql:host={$this->host};dbname={$this->database}",
+                username: $this->username,
+                password: $this->password,
+                options: [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+                ]
+            );
         } catch (PDOException $e) {
-            echo "Erro de conexão: " . $e->getMessage();
-            exit;
+            throw new Exception("Connection error: " . $e->getMessage());
         }
     }
-
-    public function insert($table, $data)
+    public function insert(string $table, array $data)
     {
-        $columns = implode(", ", array_keys($data));
-        $values = ":" . implode(", :", array_keys($data));
-        $sql = "INSERT INTO $table ($columns) VALUES ($values)";
-        $query = $this->connection->prepare($sql);
-        $this->bindValues($query, $data);
-        return $query->execute();
+        try {
+            $columns = implode(", ", array_keys($data));
+            $values = ":" . implode(", :", array_keys($data));
+            $sql = "INSERT INTO $table ($columns) VALUES ($values)";
+            $query = $this->connection->prepare($sql);
+            $this->bindValues($query, $data);
+            return $query->execute();
+        } catch (PDOException $e) {
+            return $this->errorAtempt(500, "Erro ao inserir registro: " . $e->getMessage());
+        }
     }
-
-    public function select($table, $columns = "*", $where = [], $orderBy = null)
+    public function select(string $table, string $columns = "*", array $where = [], string $orderBy = null)
     {
-        $sql = "SELECT $columns FROM $table";
-        if (!empty($where)) {
-            $sql .= " WHERE " . $this->buildWhereClause($where);
+        try {
+            $sql = "SELECT $columns FROM $table";
+            if (!empty($where)) {
+                $sql .= " WHERE " . $this->buildWhereClause($where);
+            }
+            if ($orderBy) {
+                $sql .= " ORDER BY $orderBy";
+            }
+            $query = $this->connection->prepare($sql);
+            $this->bindValues($query, $where);
+            $query->execute();
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return $this->errorAtempt(500, "Erro ao buscar registro: " . $e->getMessage());
         }
-        if ($orderBy) {
-            $sql .= " ORDER BY $orderBy";
-        }
-        $query = $this->connection->prepare($sql);
-        $this->bindValues($query, $where);
-        $query->execute();
-        return $query->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    public function update($table, $data, $where = [])
+    public function update(string $table, array $data, array $where = [])
     {
-        $set = "";
-        foreach ($data as $key => $value) {
-            $set .= "$key=:$key, ";
-        }
-        $set = rtrim($set, ", ");
+        try {
+            $set = "";
+            foreach ($data as $key => $value) {
+                $set .= "$key=:$key, ";
+            }
+            $set = rtrim($set, ", ");
 
-        $sql = "UPDATE $table SET $set";
-        if (!empty($where)) {
-            $sql .= " WHERE " . $this->buildWhereClause($where);
+            $sql = "UPDATE $table SET $set";
+            if (!empty($where)) {
+                $sql .= " WHERE " . $this->buildWhereClause($where);
+            }
+            $query = $this->connection->prepare($sql);
+            $this->bindValues($query, $data + $where);
+            return $query->execute();
+        } catch (PDOException $e) {
+            return $this->errorAtempt(500, "Erro ao atualizar registro: " . $e->getMessage());
         }
-        $query = $this->connection->prepare($sql);
-        $this->bindValues($query, $data + $where);
-        return $query->execute();
     }
-
-    public function delete($table, $where = [])
+    public function delete(string $table, array $where = [])
     {
-        $sql = "DELETE FROM $table";
-        if (!empty($where)) {
-            $sql .= " WHERE " . $this->buildWhereClause($where);
+        try {
+            $sql = "DELETE FROM $table";
+            if (!empty($where)) {
+                $sql .= " WHERE " . $this->buildWhereClause($where);
+            }
+            $query = $this->connection->prepare($sql);
+            $this->bindValues($query, $where);
+            return $query->execute();
+        } catch (PDOException $e) {
+            return $this->errorAtempt(500, "Erro ao deletar registro: " . $e->getMessage());
         }
-        $query = $this->connection->prepare($sql);
-        $this->bindValues($query, $where);
-        return $query->execute();
     }
-
-    private function buildWhereClause($where)
+    private function buildWhereClause(array $where)
     {
         $conditions = "";
         foreach ($where as $column => $value) {
@@ -81,11 +98,26 @@ class Controller
         }
         return rtrim($conditions, " AND ");
     }
-
-    private function bindValues($query, $values)
+    private function bindValues($query, array $values)
     {
         foreach ($values as $key => $value) {
             $query->bindValue(":$key", $value);
+        }
+    }
+    public function errorAtempt($code, $message)
+    {
+        return $this->response($code, $message);
+    }
+    public function response(int $status, string $message, array $data = [], $type = false)
+    {
+        switch ($type) {
+            case true:
+                header('Content-Type: application/json');
+                echo json_encode(["status" => $status, "message" => $message, "data" => $data], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+                break;
+            default:
+                header('Content-Type: application/json');
+                echo json_encode(["status" => $status, "message" => $message, "data" => $data], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         }
     }
 }
